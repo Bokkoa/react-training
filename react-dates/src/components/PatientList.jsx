@@ -1,9 +1,18 @@
+import { useEffect } from "react";
 import Patient from "./Patient"
 
-const PatientList = ({patients}) => {
+const PatientList = ({patients, setPatient, deletePatient}) => {
 
 
-  console.log(patients && patients.length);
+  
+  useEffect(() => {
+    if(patients.length > 0){
+      console.log('Patient has been added')
+    }
+    console.log(patients && patients.length);
+
+  }, [patients]);
+  
 
   return (
 
@@ -20,6 +29,8 @@ const PatientList = ({patients}) => {
                 <Patient 
                     key={patient.id} 
                     patient={patient} 
+                    setPatient={setPatient}
+                    deletePatient={deletePatient}
                 />
               )}
             

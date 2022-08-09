@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const Form = ({patients, setPatients}) => {
+const Form = ({patients, setPatients, patient, setPatient}) => {
   
   const [ name, setName ] = useState('');
   const [ owner, setOwner ] = useState('');
@@ -10,6 +10,28 @@ const Form = ({patients, setPatients}) => {
 
 
   const [error, setError] = useState(false);
+
+
+  // listen for patient that is modified in patient component
+  useEffect(() => {
+    
+    // if theres something in patient
+    if(Object.keys(patient).length > 0){
+      console.log("Theres something in patient");
+
+      // setting in form whe click edit
+      setName(patient.name);
+      setOwner(patient.owner);
+      setEmail(patient.email);
+      setEntryDate(patient.entryDate);
+      setSymptoms(patient.symptoms);
+    }
+
+  }, [patient]);
+
+  useEffect(() => {
+    console.log('Component ready');
+  }, [])
 
   const generateId = () => {
     const random = Math.random().toString(36).substring(2);
@@ -41,9 +63,26 @@ const Form = ({patients, setPatients}) => {
       email, 
       entryDate, 
       symptoms,
-      id: generateId(),
     }
-    setPatients( [...patients, patientObject]);
+
+    if( patient.id ){
+      // editing patient
+      patientObject.id = patient.id;
+
+
+      // adding patientObject (the edited one) to patients state
+      const updatedPatients = patients.map( p => p.id === patient.id ? patientObject : p);
+      setPatients( updatedPatients );
+      setPatient({});
+
+    }else{
+      // new patient
+
+      patientObject.id = generateId();
+
+      setPatients( [...patients, patientObject]);
+    }
+
 
     // clean form
     setName('');
@@ -144,7 +183,7 @@ const Form = ({patients, setPatients}) => {
           type="submit" 
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold 
                      hover:bg-indigo-700 cursor-pointer transition-all"
-          value="Add patient"
+          value={patient.id ? 'Edit Patient' : 'Add patient'}
         />
 
 
