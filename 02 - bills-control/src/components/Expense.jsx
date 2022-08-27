@@ -1,3 +1,13 @@
+import {
+    LeadingActions,
+    SwipeableList,
+    SwipeableListItem,
+    SwipeAction,
+    TrailingActions
+} from 'react-swipeable-list'
+
+import "react-swipeable-list/dist/styles.css"
+
 import { dateFormat } from "../helpers";
 
 import IconSave from '../img/saving_icon.svg'
@@ -19,33 +29,64 @@ const dictionaryIcons = {
 }
 
 
-const Expense = ({ expense }) => {
+const Expense = ({setExpenseEdit, expense, deleteExpense }) => {
 
     const { category, name, quantity, id, date } = expense;
+    
+    // swipeable to left
+    const leadingActions = () => (
+        <LeadingActions>
+            <SwipeAction onClick={ () => setExpenseEdit(expense) }>
+                Edit
+            </SwipeAction>
+        </LeadingActions>
+    )
 
-  return (
-    <div className="expense shadow">
-        <div className="content-expense">
+    // swipeable to right
+    const trailingActions =  () => (
+        <TrailingActions>
+                <SwipeAction 
+                    destructive={true}  // animation
+                    onClick={ () => deleteExpense(id) }>
+                    Delete
+                </SwipeAction>
+        </TrailingActions>
+    )
 
-            {/* IMAGE */}
+    return (
 
-            <img 
-                src={dictionaryIcons[category]}
-                alt="Icons" 
-            />
+        <SwipeableList>
+            <SwipeableListItem
+                leadingActions={leadingActions()}
+                trailingActions={trailingActions()}
+            >
+                <div className="expense shadow">
+                    <div className="content-expense">
 
-            <div className="description-expense">
-                <p className="category">{category}</p>
-                <p className="name-expense">{name}</p>
-                <p className="date-expense">
-                    Added at: {''}
-                    <span>{dateFormat(date)}</span>
-                </p>
-            </div>
-        </div>
-        <p className="quantity-expense">${quantity}</p>
-    </div>
-  )
+                        {/* IMAGE */}
+
+                        <img 
+                            src={dictionaryIcons[category]}
+                            alt="Icons" 
+                        />
+
+                        <div className="description-expense">
+                            <p className="category">{category}</p>
+                            <p className="name-expense">{name}</p>
+                            <p className="date-expense">
+                                Added at: {''}
+                                <span>{dateFormat(date)}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <p className="quantity-expense">${quantity}</p>
+                </div>
+
+            </SwipeableListItem>
+
+        </SwipeableList>
+        
+    )
 }
 
 export default Expense

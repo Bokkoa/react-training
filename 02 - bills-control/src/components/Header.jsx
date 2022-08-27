@@ -2,7 +2,11 @@ import React from 'react'
 import ControlBudget from './ControlBudget'
 import NewBudget from './NewBudget'
 
-const Header = ({ budget, 
+const Header = ({ 
+                  expenses,
+                  setExpenses,
+                  header,  
+                  budget, 
                   setBudget, 
                   isValidBudget, 
                   setIsValidBudget}) => {
@@ -14,7 +18,12 @@ const Header = ({ budget,
         {isValidBudget ? (
             
             <ControlBudget
+                expenses={expenses}
+                setExpenses={setExpenses}
+                header={header}
                 budget={budget}
+                setBudget={setBudget}
+                setIsValidBudget={setIsValidBudget}
              />
 
         ) : (

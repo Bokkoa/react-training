@@ -1,18 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CloseBtn from '../img/close.svg'
 import Message from './Message';
 
 
-const Modal = ({ setModal, modalAnimate, setModalAnimate, saveNewExpsense}) => {
+const Modal = ({ setModal, 
+                 modalAnimate, 
+                 setModalAnimate, 
+                 saveNewExpsense, 
+                 expenseEdit,
+                 setExpenseEdit }) => {
 
     const [ name, setName ] = useState('');
     const [ quantity, setQuantity ] = useState('');
     const [ category, setCategory ] = useState('');
+    const [ date, setDate ] = useState('');
+    const [ id, setId ] = useState('');
     const [message, setMessage] = useState('');
+
+    useEffect( () => {
+        
+        // if editing...
+        if(Object.keys(expenseEdit).length > 0){
+            setName(expenseEdit.name);
+            setQuantity(expenseEdit.quantity);
+            setCategory(expenseEdit.category);
+            setId(expenseEdit.id);
+            setDate( expenseEdit.date );
+        }
+
+    }, [])
 
  const closeModal = () => {
      setModalAnimate(false);
-
+     setExpenseEdit({});
      setTimeout(() => {
          setModal(false);
      }, 500);
@@ -28,12 +48,12 @@ const Modal = ({ setModal, modalAnimate, setModalAnimate, saveNewExpsense}) => {
 
         setTimeout(() => {
                 setMessage('');
-        }, 3000);
+        }, 500);
         return;
     }
 
 
-    saveNewExpsense({name, quantity, category});
+    saveNewExpsense({name, quantity, category, id, date});
     closeModal();
  }
 
@@ -51,7 +71,7 @@ const Modal = ({ setModal, modalAnimate, setModalAnimate, saveNewExpsense}) => {
         <form 
             onSubmit={handleSubmit}
             className={`form ${modalAnimate ? 'animate' : 'close' }`}>
-            <legend>New Expense</legend>
+            <legend>{expenseEdit.name ? 'Edit expense' : 'New expense'}</legend>
 
             { message && <Message type="error">{message}</Message>}
 
@@ -106,7 +126,7 @@ const Modal = ({ setModal, modalAnimate, setModalAnimate, saveNewExpsense}) => {
 
             <input 
                 type="submit" 
-                value="Add expense"
+                value={expenseEdit.name ? 'Edit expense' : 'Add expense'}
             />
 
         </form>
