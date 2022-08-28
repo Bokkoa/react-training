@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import { useEffect, useState } from "react";
 import { currencies } from "../data/currencies";
 import useSelectCurrency from "../hooks/useSelectCurrency"
+import Error from "./Error";
 
 const InputSubmit = styled.input`
     background-color: #9497FF;
@@ -23,9 +24,10 @@ const InputSubmit = styled.input`
     }
 `
 
-const Form = () => {
+const Form = ({ setCurrencies }) => {
 
     const [ cryptos, setCryptos ] = useState([]);
+    const [ error, setError ] = useState(false);
 
     // positional naming
     const [ currency, SelectCurrency ] = useSelectCurrency('Choose your currency', currencies);
@@ -36,23 +38,21 @@ const Form = () => {
 
         const consultApi = async () => {
 
-            const url = `https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=${currency}`;
+            const url = `https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD`;
 
             const response = await fetch( url );
             const result = await response.json();
 
-            console.log(result.Data);
 
             const arrayCryptos = result.Data.map( crypto => {
 
                 return {
-                    id: crypto.Name,
-                    name: crypto.FullName
+                    id: crypto.CoinInfo.Name,
+                    name: crypto.CoinInfo.FullName
                     
                 };
 
             });
-
 
             setCryptos(arrayCryptos);
 
@@ -62,15 +62,38 @@ const Form = () => {
 
     }, [])
 
-    return (
-        <form
-            onSubmit={handleSubmit}
-        >
-            <SelectCurrency />
-            <SelectCrypto />
-            <InputSubmit type="submit" value="Check price" />
 
-        </form>
+    const handleSubmit =  (e) => {
+        e.preventDefault();
+
+        if([currency, crypto].includes('')){
+            console.log("ERROR");
+            setError(true);
+            return;
+        }
+
+        setError(false);
+
+        setCurrencies({
+            currency,
+            crypto
+        })
+
+    }
+
+    return (
+        <>
+            {error && <Error>All fields are required</Error>}
+
+            <form
+                onSubmit={handleSubmit}
+                >
+                <SelectCurrency />
+                <SelectCrypto />
+                <InputSubmit type="submit" value="Check price" />
+
+            </form>
+        </>
     )
 }
 
