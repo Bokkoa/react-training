@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import LogIn from './layout/LogIn'
 import Layout from './layout/Layout'
 
 import Home from './pages/Home'
-import LoginForm from './pages/LoginForm'
+import NewClient from './pages/NewClient'
+import EditClient from './pages/EditClient'
 
 function App() {
 
@@ -13,13 +13,12 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path='/' element={<LogIn />}>
-            <Route index element={<LoginForm />} />
-          </Route>
-
           <Route path='/clients' element={<Layout />}>
               {/* default route in layout defined by index */}
               <Route index element={<Home />} />
+
+              <Route path="new" element={<NewClient />} />
+              <Route path="edit/:id" element={<EditClient />} />
           </Route>
 
         </Routes>
