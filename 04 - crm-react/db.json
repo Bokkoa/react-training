@@ -1,0 +1,44 @@
+{
+  "clients": [
+    {
+      "name": "Felipe",
+      "company": "A123",
+      "email": "melisa@test.com",
+      "phone": "123123",
+      "notes": "1231231",
+      "id": 1
+    },
+    {
+      "name": "AASDF",
+      "company": "A",
+      "email": "SASD@ASDF.COMN",
+      "phone": "123123",
+      "notes": "123123",
+      "id": 3
+    },
+    {
+      "name": "AASDF",
+      "company": "A",
+      "email": "SASD@ASDF.COMN",
+      "phone": "123123",
+      "notes": "123123",
+      "id": 4
+    },
+    {
+      "name": "AASDF",
+      "company": "A123",
+      "email": "jinba_the_folker@hotmail.com",
+      "phone": "123123",
+      "notes": "123",
+      "id": 5
+    },
+    {
+      "name": "Felipe Cruz",
+      "company": "A",
+      "email": "mikimicaela102@gmail.com",
+      "phone": "123123",
+      "notes": "1231231",
+      "id": 6
+    }
+  ]
+}
