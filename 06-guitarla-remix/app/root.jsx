@@ -1,4 +1,4 @@
- import { useState } from 'react'
+ import { useEffect, useState } from 'react'
  import {
   Meta,
   Links,
@@ -8,7 +8,6 @@
   useCatch,
   Link
  } from '@remix-run/react'
- 
  import styles from '~/styles/index.css'
  import Header from '~/components/header'
  import Footer from '~/components/footer'
@@ -25,7 +24,17 @@
  }
  
  export default function App () {
-  const [ cart, setCart ] = useState([])
+  // resilence for SSR, wait for client side to load local storage
+  const cartLocalStorage = typeof window !== 'undefined' && (JSON.parse(localStorage.getItem('cart')) || [])
+  const [ cart, setCart ] = useState(cartLocalStorage)
+
+
+  //LOCAL STORAGE
+  useEffect(() => {
+    if(typeof window !== 'undefined'){
+      localStorage.setItem('cart', JSON.stringify(cart))
+    }
+  }, [cart])
 
   const addToCart = (guitar) => {
     if(cart.some(guitarState => guitarState.id === guitar.id)){
@@ -55,13 +64,19 @@
 
     setCart(updatedCart)
   }
+
+  const deleteGuitar = (id) => {
+    const updatedCart = cart.filter(guitarState => guitarState.id !== id)
+    setCart(updatedCart)
+  }
   return (
     <Document>
       <Outlet 
         context={{
           addToCart,
           updateQuantity,
-          cart
+          cart,
+          deleteGuitar
         }}
       />
     </Document>
@@ -85,7 +100,7 @@
     {
       rel: 'preconnect',
       href: 'https://fonts.gstatic.com',
-      crossOrigin: true
+      crossOrigin: "true"
     },
     {
       rel: 'stylesheet',

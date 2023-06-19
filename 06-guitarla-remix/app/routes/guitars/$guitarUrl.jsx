@@ -51,7 +51,6 @@ function GuitarUrl() {
       price,
       quantity
     }
-    console.log(selectedGuitar)
     addToCart(selectedGuitar)
   }
 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useOutletContext } from '@remix-run/react'
 import styles from '~/styles/cart.css'
 export function links(){
@@ -17,51 +18,63 @@ export function meta(){
 }
 
 export function Cart(){
-  const { cart, updateQuantity } = useOutletContext()
-  return (
-    <main className="container">
-      <h1 className="heading">
-        Purchase cart
-      </h1>
+  const [total, setTotal] = useState(0)
+  const { cart, updateQuantity, deleteGuitar } = useOutletContext()
 
-      <div className="content">
-        <div className="cart">
-          <h2>Articles</h2>
-          {cart.length === 0 ? 'Empty cart' :
-            cart.map(product => (
-              <div key={product.id} className='product'>
-                <div>
-                  <img src={product.image} alt={`Model ${product.name}`}  />
+  useEffect(() => {
+    const totalCalculation = cart.reduce((total, guitar) => total + (guitar.quantity * guitar.price), 0)
+    setTotal(totalCalculation)
+  }, [cart])
+
+  return (
+      <main className="container">
+        <h1 className="heading">
+          Purchase cart
+        </h1>
+
+        <div className="content">
+          <div className="cart">
+            <h2>Articles</h2>
+            {cart?.length === 0 ? 'Empty cart' :
+              cart.map(product => (
+                <div key={product.id} className='product'>
+                  <div>
+                    <img src={product.image} alt={`Model ${product.name}`}  />
+                  </div>
+                  <div>
+                    <p className="name">{product.name}</p>
+                    <p>Quantity:</p>
+                    <select 
+                      className='select'
+                      onChange={e => updateQuantity({
+                        quantity: +e.target.value,
+                        id: product.id
+                      })}
+                      value={product.quantity}>
+                      <option value="0">--- Select ---</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <p className='price'>$<span>{product.price}</span></p>
+                    <p className='subtotal'>Subtotal: $<span>{product.quantity * product.price}</span></p>
+                  </div>
+                  <button
+                    onClick={ () => deleteGuitar(product.id)}
+                    type='button'
+                    className='btn_delete'
+                  >X</button>
                 </div>
-                <div>
-                  <p className="name">{product.name}</p>
-                  <p>Quantity:</p>
-                  <select 
-                    className='select'
-                    onChange={e => updateQuantity({
-                      quantity: +e.target.value,
-                      id: product.id
-                    })}
-                    value={product.quantity}>
-                    <option value="0">--- Select ---</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <p className='price'>$<span>{product.price}</span></p>
-                  <p className='subtotal'>Subtotal: $<span>{product.quantity * product.price}</span></p>
-                </div>
-              </div>
-            ))}
+              ))}
+          </div>
+          <aside className="resume">
+            <h3>Order summary</h3>
+            <p>Total: ${total}</p>
+          </aside>
         </div>
-        <aside className="resume">
-          <h3>Order summary</h3>
-          <p>Total: $</p>
-        </aside>
-      </div>
-    </main>
+      </main>
   )
 }
 
