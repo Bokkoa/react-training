@@ -1,3 +1,4 @@
+ import { useState } from 'react'
  import {
   Meta,
   Links,
@@ -24,9 +25,45 @@
  }
  
  export default function App () {
+  const [ cart, setCart ] = useState([])
+
+  const addToCart = (guitar) => {
+    if(cart.some(guitarState => guitarState.id === guitar.id)){
+      // the element already exists
+      const updatedCart = cart.map( guitarState => {
+        if(guitarState.id === guitar.id){
+          guitarState.quantity = guitar.quantity
+        }
+        return guitarState
+      })
+
+      setCart(updatedCart)
+    } else {
+      //new row
+      setCart([...cart, guitar])
+    }
+  }
+
+  const updateQuantity = (guitar) => {
+    console.log(guitar)
+    const updatedCart = cart.map(guitarState => {
+      if(guitarState.id === guitar.id) {
+        guitarState.quantity = guitar.quantity;
+      }
+      return guitarState
+    })
+
+    setCart(updatedCart)
+  }
   return (
     <Document>
-      <Outlet />
+      <Outlet 
+        context={{
+          addToCart,
+          updateQuantity,
+          cart
+        }}
+      />
     </Document>
   )
  }

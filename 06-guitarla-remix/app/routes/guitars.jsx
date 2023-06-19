@@ -1,0 +1,22 @@
+import {Outlet, useOutletContext } from '@remix-run/react'
+import styles from '~/styles/guitars.css'
+
+export function links(){
+  return [
+    {
+      rel: 'stylesheet',
+      href: styles
+    }
+  ]
+}
+
+// WORKS AS LAYOUT BECAUSE HAVE THE SAME NAME AS THE FOLDER (/guitars)
+const Shop = () => {
+  return (
+    <main className="container">
+       <Outlet context={useOutletContext()}/>
+    </main>
+  )
+}
+
+export default Shop
