@@ -1,0 +1,68 @@
+---
+import logo from '../img/logo.svg'
+---
+
+<header class="header">
+  <div class="container bar">
+    <a href="/">
+      <img src={logo} alt="Logo" />
+    </a>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/store">Store</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+.header {
+    background-image: linear-gradient(to right, rgb(0 0 0 / .8), rgb(0 0 0 / .7)), url(../img/header.jpg);
+    padding: 5rem 0;
+    background-position: center;
+    background-size: cover;
+}
+.header img {
+    width: 30rem;
+}
+
+.bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .bar {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.navigation {
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+@media (min-width: 768px) {
+    .navigation {
+        margin: 0;
+    }
+}
+.navigation a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: .5rem;
+    transition-property: background-color;
+    transition-duration: 300ms;
+}
+.navigation a:hover,
+.active {
+    background-color: var(--primary);
+}
+</style>
